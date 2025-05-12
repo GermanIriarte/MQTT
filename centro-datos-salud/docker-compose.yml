@@ -1,0 +1,82 @@
+version: "3.9"
+
+services:
+
+  db:
+    image: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: salud
+      POSTGRES_PASSWORD: salud123
+      POSTGRES_DB: centro_salud
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+
+  broker:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    restart: always
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./broker/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  gateway:
+    container_name: gateway
+    build: ./gateway
+    restart: always
+    ports:
+      - "3002:3001"    # gRPC también puede usar HTTP pero aquí está reservado
+      - "50051:50051"
+    depends_on:
+      - broker
+
+  gateway_http:
+    build: ./gateway_http
+    container_name: gateway_http
+    ports:
+      - "3001:3001"
+    depends_on:
+      - broker
+
+  sensor_grpc:
+    build: ./sensor_grpc
+    depends_on:
+      - gateway
+    restart: always
+  
+
+  gateway_ws:
+    build: ./gateway_ws
+    container_name: gateway_ws
+    ports:
+      - "3003:3003"
+    depends_on:
+      - broker
+      
+  sensor_ws:
+    build: ./sensor_ws
+    container_name: sensor_ws
+    depends_on:
+      - gateway_ws
+
+  sensor_simulado:
+    build: ./sensor_simulado
+    depends_on:
+      - gateway_http
+    restart: always
+
+  subscriptor:
+    build: ./subscriptor
+    depends_on:
+      - broker
+      - db
+    restart: always
+
+volumes:
+  db_data:

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package health;
+
+service HealthService {
+  rpc SendHealthData (HealthData) returns (Response);
+}
+
+message HealthData {
+  string sensor_id = 1;
+  string timestamp = 2;
+  float body_temperature = 3;
+  int32 heart_rate = 4;
+  string blood_pressure = 5;
+}
+
+message Response {
+  string status = 1;
+}

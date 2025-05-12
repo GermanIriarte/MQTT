@@ -1,0 +1,14 @@
+(borrar base de datos)
+docker exec -it postgres psql -U salud -d centro_salud -c "DELETE FROM health_readings;"
+
+(apagar sensores)
+docker-compose stop sensor_ws sensor_simulado sensor_grpc
+
+(encender servicios base) 
+
+docker-compose up -d mosquitto postgres subscriptor
+
+
+(ingresar a postgre) 
+
+docker exec -it postgres psql -U salud -d centro_salud

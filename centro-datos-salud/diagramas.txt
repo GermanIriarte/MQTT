@@ -1,0 +1,15 @@
+sensor ---->  Gateway ----> bróker (suscriptor) ----> postgress
+
+http
+
+sensor_simulado ----> gateway_http (…)
+
+grpc
+
+sensor_grpc ----> Gateway (...)
+
+
+ws
+
+sensor_ws ----> gateway_ws (...)
+
