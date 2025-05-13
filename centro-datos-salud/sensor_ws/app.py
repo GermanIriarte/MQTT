@@ -20,20 +20,20 @@ async def enviar_datos():
     while True:
         try:
             async with websockets.connect(GATEWAY_WS_URL, ping_interval=None) as websocket:
-                print("📡 Conectado al gateway WebSocket", flush=True)
+                print(" Conectado al gateway WebSocket", flush=True)
                 while True:
                     data = generar_datos()
                     try:
                         await websocket.send(json.dumps(data))
-                        print(f"📤 Enviado por WS: {data}", flush=True)
+                        print(f" Enviado por WS: {data}", flush=True)
                     except websockets.exceptions.ConnectionClosedError as e:
                         # Si el server cierra con 1011, lo capturamos y salimos al reconectar
-                        print(f"❌ Conexión cerrada por el servidor: {e}", flush=True)
+                        print(f" Conexión cerrada por el servidor: {e}", flush=True)
                         break
                     await asyncio.sleep(5)
         except Exception as e:
-            print(f"❌ No pude conectar o la conexión falló: {e}", flush=True)
-        print(f"🔄 Reintentando en {RETRY_SECONDS} segundos...", flush=True)
+            print(f" No pude conectar o la conexión falló: {e}", flush=True)
+        print(f" Reintentando en {RETRY_SECONDS} segundos...", flush=True)
         await asyncio.sleep(RETRY_SECONDS)
 
 if __name__ == "__main__":

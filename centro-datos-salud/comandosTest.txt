@@ -42,6 +42,8 @@ docker-compose logs -f sensor_grpc
 docker-compose logs -f gateway
 docker-compose logs -f subscriptor
 
+# ver los servicios activos
+docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
 
 #ENTRAR A LA BASE DE DATOS
 docker exec -it postgres psql -U salud -d centro_salud
@@ -49,8 +51,20 @@ docker exec -it postgres psql -U salud -d centro_salud
 #HACER UN SELECT *
 SELECT * FROM health_readings;
 
+# BORRAR TODOS LOS REGISTROS DE LA BASE DE DATOS
+docker exec -it postgres psql -U salud -d centro_salud -c "DELETE FROM health_readings;"
+
+
 #SALIR DE POSTGRES
 \q
+
+
+#reconstruir una imagen 
+docker-compose build nombre_servicio
+
+
+#levantar todo 
+docker-compose up -d db subscriptor broker gateway gateway_http gateway_ws sensor_simulado sensor_grpc sensor_ws
 
 
 

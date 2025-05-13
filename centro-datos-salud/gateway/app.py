@@ -16,7 +16,7 @@ class HealthService(health_pb2_grpc.HealthServiceServicer):
             "blood_pressure": request.blood_pressure,
         }
 
-        print("📡 Recibido por gRPC:", data, flush=True)
+        print(" Recibido por gRPC:", data, flush=True)
 
         try:
             publish.single(
@@ -25,19 +25,19 @@ class HealthService(health_pb2_grpc.HealthServiceServicer):
                 hostname="mosquitto",
                 port=1883
             )
-            print("📨 Publicado en MQTT desde gRPC", flush=True)
+            print(" Publicado en MQTT desde gRPC", flush=True)
         except Exception as e:
-            print(f"❌ Error al publicar MQTT desde gRPC: {e}")
+            print(f" Error al publicar MQTT desde gRPC: {e}")
 
         return health_pb2.Response(status="OK")
 
 
-def serve():
+def serve(): #aqui se levanta el servicio
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    health_pb2_grpc.add_HealthServiceServicer_to_server(HealthService(), server)
+    health_pb2_grpc.add_HealthServiceServicer_to_server(HealthService(), server) #le dice que este servidor se va a exponer y que el metodo principal es health
     server.add_insecure_port("[::]:50051")
     server.start()
-    print("🚀 Servidor gRPC escuchando en el puerto 50051", flush=True)
+    print(" Servidor gRPC escuchando en el puerto 50051", flush=True)
     server.wait_for_termination()
 
 if __name__ == "__main__":

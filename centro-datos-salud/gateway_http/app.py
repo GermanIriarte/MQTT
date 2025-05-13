@@ -7,7 +7,7 @@ app = Flask(__name__)
 @app.route("/sensores", methods=["POST"])
 def recibir_datos():
     data = request.get_json()
-    print("🌐 Recibido por HTTP:", data)
+    print("Recibido por HTTP:", data)
 
     try:
         publish.single(
@@ -16,9 +16,9 @@ def recibir_datos():
             hostname="mosquitto",
             port=1883
         )
-        print("📨 Publicado en MQTT desde HTTP")
+        print("Publicado en MQTT desde HTTP")
     except Exception as e:
-        print(f"❌ Error al publicar MQTT desde HTTP: {e}")
+        print(f" Error al publicar MQTT desde HTTP: {e}")
 
     return {"status": "OK"}
 

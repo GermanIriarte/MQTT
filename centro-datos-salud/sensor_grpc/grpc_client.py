@@ -7,7 +7,7 @@ from health_pb2_grpc import HealthServiceStub
 
 def generar_datos():
     return HealthData(
-        sensor_id="sensor01",
+        sensor_id="sensorGrpc",
         timestamp=datetime.datetime.utcnow().isoformat(),
         body_temperature=round(random.uniform(36.0, 38.5), 1),
         heart_rate=random.randint(60, 100),
@@ -16,7 +16,7 @@ def generar_datos():
 
 def run():
     with grpc.insecure_channel("gateway:50051") as channel:
-        stub = HealthServiceStub(channel)
+        stub = HealthServiceStub(channel) #crea un cliente grpc que puede utilizar los metodos del proto 
         while True:
             data = generar_datos()
             response = stub.SendHealthData(data)

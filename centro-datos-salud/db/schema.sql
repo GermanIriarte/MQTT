@@ -7,3 +7,4 @@ CREATE TABLE IF NOT EXISTS health_readings (
     blood_pressure VARCHAR(15),
     PRIMARY KEY (sensor_id, timestamp)
 );
+ 

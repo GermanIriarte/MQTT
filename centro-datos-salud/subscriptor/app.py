@@ -35,18 +35,18 @@ def insertar_en_db(data):
 
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
-        print("✅ Conectado al broker MQTT", flush=True)
+        print(" Conectado al broker MQTT", flush=True)
         client.subscribe(MQTT_TOPIC)
     else:
-        print(f"❌ Falló la conexión al broker MQTT. Código: {rc}", flush=True)
+        print(f" Falló la conexión al broker MQTT. Código: {rc}", flush=True)
 
 def on_message(client, userdata, msg):
     try:
         payload = json.loads(msg.payload.decode())
-        print(f"📥 Recibido MQTT: {payload}", flush=True)
+        print(f"Recibido MQTT: {payload}", flush=True)
         insertar_en_db(payload)
     except Exception as e:
-        print(f"❌ Error al procesar mensaje: {e}", flush=True)
+        print(f"Error al procesar mensaje: {e}", flush=True)
 
 client = mqtt.Client()
 client.on_connect = on_connect

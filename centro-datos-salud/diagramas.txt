@@ -1,4 +1,4 @@
-sensor ---->  Gateway ----> bróker (suscriptor) ----> postgress
+sensor ---->  Gateway ----> bróker (suscriptor) ----> postgres
 
 http
 
